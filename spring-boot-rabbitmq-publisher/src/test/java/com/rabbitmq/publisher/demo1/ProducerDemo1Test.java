@@ -1,6 +1,7 @@
 package com.rabbitmq.publisher.demo1;
 
 
+import java.nio.charset.StandardCharsets;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,21 +15,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ProducerDemo1Test {
 
+
   @Autowired
   private RabbitTemplate rabbitTemplate;
 
-
   @Test
   public void testSendMessage() {
-    // 声明交换机名称（必须与 RabbitMQ 中已有交换机匹配）
-    String exchangeName = "";
-    // 指定路由键（用于匹配绑定队列）
-    String routingKey = "queue_test";
-    // 构造消息体（此处为简单字符串 "hello world" 的字节数组）
-    byte[] bytes = "hello world".getBytes();
-    // 发送消息至指定交换机，匹配路由键，将消息分发给匹配的队列
-    rabbitTemplate.convertAndSend(exchangeName, routingKey, bytes);
+    final String exchangeName = ""; // 默认交换机，routingKey 必须是队列名称
+    final String routingKey = "queue_test";
+    final String message = "我是一个消息";
+
+   for (int i = 0; i < 10; i++){
+     rabbitTemplate.convertAndSend(exchangeName,
+                                   routingKey,
+                                   message.getBytes(StandardCharsets.UTF_8));
+   }
+
+
   }
-
-
 }
