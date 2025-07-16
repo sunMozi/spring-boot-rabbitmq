@@ -5,3 +5,10 @@ spring:
     virtual-host: /test
     username: itheima
     password: 123321
+    listener:
+      simple:
+        concurrency: 10                # 初始并发消费者线程数
+        max-concurrency: 30            # 最大并发线程数
+        prefetch: 100                  # 限制一次拉取消息数量，防止 OOM
+        retry:
+          enabled: true                # 启用消费失败重试（生产级可定制）
